@@ -91,9 +91,13 @@ func (u *User) GetAllUsers(db *gorm.DB) (*[]User, error) {
 }
 
 // GetUserByID method
-func (u *User) GetUserByID(db *gorm.DB, user_id uint32) (*User, error) {
+func (u *User) GetUserByID(db *gorm.DB, userID uint32) (*User, error) {
 	var err error
-	err = db.Debug().Model(User{}).Where("userid = ?", user_id).Take(&u).Error
+	err = db.Debug().
+		Model(User{}).
+		Where("userid = ?", userID).
+		Take(&u).
+		Error
 	if err != nil {
 		return &User{}, err
 	}
@@ -104,12 +108,16 @@ func (u *User) GetUserByID(db *gorm.DB, user_id uint32) (*User, error) {
 }
 
 // UpdateUserByID method
-func (u *User) UpdateUserByID(db *gorm.DB, user_id uint32) (*User, error) {
+func (u *User) UpdateUserByID(db *gorm.DB, userID uint32) (*User, error) {
 	err := u.PasswordToHash()
 	if err != nil {
 		log.Fatal(err)
 	}
-	db = db.Debug().Model(&User{}).Where("userid = ?", user_id).Take(&User{}).UpdateColumns(
+	db = db.Debug().
+		Model(&User{}).
+		Where("userid = ?", userID).
+		Take(&User{}).
+		UpdateColumns(
 		map[string]interface{}{
 			"password":  u.Password,
 			"username":  u.UserName,
@@ -120,7 +128,11 @@ func (u *User) UpdateUserByID(db *gorm.DB, user_id uint32) (*User, error) {
 	if db.Error != nil {
 		return &User{}, db.Error
 	}
-	err = db.Debug().Model(&User{}).Where("userid = ?", user_id).Take(&u).Error
+	err = db.Debug().
+		Model(&User{}).
+		Where("userid = ?", userID).
+		Take(&u).
+		Error
 	if err != nil {
 		return &User{}, err
 	}
@@ -128,8 +140,12 @@ func (u *User) UpdateUserByID(db *gorm.DB, user_id uint32) (*User, error) {
 }
 
 // DeleteUserByID method
-func (u *User) DeleteUserByID(db *gorm.DB, user_id uint32) (int64, error) {
-	db = db.Debug().Model(&User{}).Where("userid = ?", user_id).Take(&User{}).Delete(&User{})
+func (u *User) DeleteUserByID(db *gorm.DB, userID uint32) (int64, error) {
+	db = db.Debug().
+		Model(&User{}).
+		Where("userid = ?", userID).
+		Take(&User{}).
+		Delete(&User{})
 	if db.Error != nil {
 		return 0, db.Error
 	}

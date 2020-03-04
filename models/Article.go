@@ -96,11 +96,11 @@ func (ar *Article) GetAllArticles(db *gorm.DB) (*[]Article, error) {
 }
 
 // FindPostByID method
-func (ar *Article) GetArticleByID(db *gorm.DB, article_id uint32) (*Article, error) {
+func (ar *Article) GetArticleByID(db *gorm.DB, articleID uint32) (*Article, error) {
 	var err error
 	err = db.Debug().
 		Model(&Article{}).
-		Where("article_id = ?", article_id).
+		Where("article_id = ?", articleID).
 		Take(&ar).
 		Error
 	if err != nil {
@@ -109,7 +109,7 @@ func (ar *Article) GetArticleByID(db *gorm.DB, article_id uint32) (*Article, err
 	if ar.ID != 0 {
 		err = db.Debug().
 			Model(&User{}).
-			Where("id = ?", ar.AuthorID).
+			Where("user_id = ?", ar.AuthorID).
 			Take(&ar.Author).
 			Error
 		if err != nil {
@@ -144,10 +144,10 @@ func (ar *Article) UpdateArticle(db *gorm.DB) (*Article, error) {
 }
 
 // DeleteAPost method
-func (ar *Article) DeleteArticleByID(db *gorm.DB, article_id uint32, user_id uint32) (int64, error) {
+func (ar *Article) DeleteArticleByID(db *gorm.DB, articleID uint32, userID uint32) (int64, error) {
 	db = db.Debug().
 		Model(&Article{}).
-		Where("article_id = ? and author_id = ?", article_id, user_id).
+		Where("article_id = ? and author_id = ?", articleID, userID.
 		Take(&Article{}).
 		Delete(&Article{})
 
